@@ -8,7 +8,7 @@ version = "0.1.0"
 dependencies = ["qrcode", "pillow", "opencv-python"]
 
 [project.scripts]
-vqr = "viqr:main"
+viqr = "viqr:main"
 
 [tool.setuptools]
 py-modules = ["viqr"]

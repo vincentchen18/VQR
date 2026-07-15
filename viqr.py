@@ -55,4 +55,16 @@ def main():
         response = read(args.read)
         if response == "No QR Codes found.":
             print(f"The provided image at {args.read} does not seem to have any valid QR codes to read.")
+            sys.exit()
+        elif response == "QR Decoding failed.":
+            print(f"QR code(s) were found in your image but were invalid or unscannable.")
+            sys.exit()
+        else: #success :D
+            if len(response) == 1:
+                print(f"1 link successfully decoded in {args.read}: {response[0]}")
+            else:
+                print(f"Multiple links successfully decoded in {args.read}:")
+                for number, link in enumerate(response):
+                    print(f"{number+1}. {link}")
+
 
