@@ -34,6 +34,7 @@ def make(text_to_encode, embed_image, size, output_file): #make the qr code
         img = paste_logo(img, embed_image)
     if output_file is not None:
         img.save(output_file)
+        print(f"Successfully generated and saved QR code to {output_file}")
         return
     c = 0
     while True:
@@ -46,6 +47,7 @@ def make(text_to_encode, embed_image, size, output_file): #make the qr code
         else:
             c += 1
     img.save(f"qr{c}.png")
+    print(f"Successfully generated and saved QR code to qr{c}.png")
 
 def read(path): # read a qr code
     # we have already verified that the file is a real image (according to magic bytes) and now we gotta view it and check for qr codes.
@@ -158,4 +160,5 @@ def main():
                 print("Your file does not seem to be a valid image.")
                 sys.exit()
         # if all validation passed:
+        print(f"Generating a QR code for {enc}...")
         make(enc, args.embed, size, args.output)
