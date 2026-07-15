@@ -1,8 +1,0 @@
-pyproject.toml
-vqr.py
-vqr.egg-info/PKG-INFO
-vqr.egg-info/SOURCES.txt
-vqr.egg-info/dependency_links.txt
-vqr.egg-info/entry_points.txt
-vqr.egg-info/requires.txt
-vqr.egg-info/top_level.txt
