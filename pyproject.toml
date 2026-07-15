@@ -1,4 +1,14 @@
-[
-project.scripts
-]
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vqr"
+version = "0.1.0"
+dependencies = ["qrcode", "pillow", "opencv-python"]
+
+[project.scripts]
 vqr = "vqr:main"
+
+[tool.setuptools]
+py-modules = ["vqr"]
