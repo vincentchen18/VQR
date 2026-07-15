@@ -6,7 +6,11 @@ from PIL import Image
 # -e or --embed : embed a subimage into the qr code (for logos and stuffs) --> ill make this an optional flag
 # -o or --output : specify the name/path of the output file i will make this default to qr.png
 # -s or --size : specify a size (optional) minimum 100 for proper scanning
-#
+
+class ViQRParser(argparse.ArgumentParser):
+    def error(self, message):
+        self.print_usage(sys.stderr)
+        self.exit(2, f"{self.prog}: error: {message}\n")
 def paste_logo(QR_image, logo_path): #helper function for make()
     logo = Image.open(logo_path).convert("RGBA")
     qr_width, qr_height = QR_image.size
@@ -62,7 +66,7 @@ def read(path): # read a qr code
     return links
 
 def main():
-    parser = argparse.ArgumentParser(prog="viqr")
+    parser = ViQRParser(prog="viqr",usage="\nQR Code Generation: viqr -m [-l LINK] [-f FILE] [-e EMBED] [-o OUTPUT] [-s SIZE]\nQR Code Decoding: viqr -r [PATH]")
     parser.add_argument("-l", "--link")
     parser.add_argument("-f", "--file") #file path if for some reason their link/data is in a file
     parser.add_argument("-e", "--embed")
@@ -160,5 +164,5 @@ def main():
                 print("Your file does not seem to be a valid image.")
                 sys.exit()
         # if all validation passed:
-        print(f"Generating a QR code for {enc}...")
+        print(f"Generating a QR code for '{enc}'...")
         make(enc, args.embed, size, args.output)
