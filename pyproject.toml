@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "vqr"
+name = "viqr"
 version = "0.1.0"
 dependencies = ["qrcode", "pillow", "opencv-python"]
 
@@ -11,4 +11,4 @@ dependencies = ["qrcode", "pillow", "opencv-python"]
 vqr = "vqr:main"
 
 [tool.setuptools]
-py-modules = ["vqr"]
+py-modules = ["viqr"]
