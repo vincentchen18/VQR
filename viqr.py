@@ -143,4 +143,4 @@ def main():
                 print("Your file does not seem to be a valid image.")
                 sys.exit()
         # if all validation passed:
-        make(enc, args.embed, args.size, args.output)
+        make(enc, args.embed, size, args.output)
