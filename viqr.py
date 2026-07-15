@@ -7,8 +7,33 @@ from PIL import Image
 # -o or --output : specify the name/path of the output file i will make this default to qr.png
 # -s or --size : specify a size (optional) minimum 100 for proper scanning
 #
-def make(): #make the qr code
-    pass
+def paste_logo(QR_image, logo_path): #helper function for make()
+    logo = Image.open(logo_path)
+    qr_width, qr_height = QR_image.size
+    logo_width = qr_width //4
+    ratio = logo.width / logo.height
+    logo_height = int(logo_width / ratio)
+    logo = logo.resize((logo_width, logo_height))
+    position = ((qr_width - logo_width) // 2, (qr_height - logo_height) // 2) #center the logo
+    QR_image.paste(logo, position, mask=logo)
+    return QR_image
+
+def make(text_to_encode, embed_image, size, output_file): #make the qr code
+    QR = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H, border=4)
+    QR.add_data(text_to_encode)
+    try:
+        QR.make(fit=True)
+    except qrcode.exceptions.DataOverflowError: # too much data to encode
+        print("The data to encode is too large.")
+        sys.exit()
+    if size is not None:
+        modules = QR.modules_count
+        QR.box_size = max(1, size // (modules + 8)) # adjust code size
+    img = QR.make_image()
+    if embed_image is not None:
+        img = paste_logo(img, embed_image)
+    img.save(output_file)
+
 
 def read(path): # read a qr code
     # we have already verified that the file is a real image (according to magic bytes) and now we gotta view it and check for qr codes.
@@ -117,6 +142,5 @@ def main():
             except Exception:
                 print("Your file does not seem to be a valid image.")
                 sys.exit()
-
-
-
+        # if all validation passed:
+        make(enc, args.embed, size, args.output)
