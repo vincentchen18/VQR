@@ -1,4 +1,4 @@
-import argparse, qrcode, cv2, sys, os
+import argparse, qrcode, cv2, sys, os, subprocess
 from PIL import Image
 # initialisation
 # flags:
@@ -11,6 +11,18 @@ class ViQRParser(argparse.ArgumentParser):
     def error(self, message):
         self.print_usage(sys.stderr)
         self.exit(2, f"{self.prog}: error: {message}\n")
+
+def open_image(path):
+    try:
+        if sys.platform == 'win32': # windows
+            os.startfile(path)
+        elif sys.platform == 'darwin': # mac
+            subprocess.run(['open', path])
+        else: #linux the greatest OS ever
+            subprocess.run(['xdg-open', path])
+    except Exception:
+        pass # don't open if you can't
+
 def paste_logo(QR_image, logo_path): #helper function for make()
     logo = Image.open(logo_path).convert("RGBA")
     qr_width, qr_height = QR_image.size
@@ -39,6 +51,7 @@ def make(text_to_encode, embed_image, size, output_file): #make the qr code
     if output_file is not None:
         img.save(output_file)
         print(f"Successfully generated and saved QR code to {output_file}")
+        open_image(output_file)
         return
     c = 0
     while True:
@@ -52,6 +65,7 @@ def make(text_to_encode, embed_image, size, output_file): #make the qr code
             c += 1
     img.save(f"qr{c}.png")
     print(f"Successfully generated and saved QR code to qr{c}.png")
+    open_image(f"qr{c}.png")
 
 def read(path): # read a qr code
     # we have already verified that the file is a real image (according to magic bytes) and now we gotta view it and check for qr codes.
