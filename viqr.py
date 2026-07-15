@@ -48,23 +48,23 @@ def main():
                     img.verify()  # checks the file is a valid, decodable image
                 pass # the image "passed" LMAO
             except Exception:
-                print("Your file is either truncated or is not an image file. Please check the magic bytes and make sure the image is correct.")
+                print(f"The file '{args.read}' is either truncated or is not an image file. Please check the magic bytes and make sure the image is correct.")
                 sys.exit()
         else:
             print("File path does not exist or target path is not a file.")
             sys.exit()
         response = read(args.read)
         if response == "No QR Codes found.":
-            print(f"The provided image at {args.read} does not seem to have any valid QR codes to read.")
+            print(f"The provided image at '{args.read}' does not seem to have any valid QR codes to read.")
             sys.exit()
         elif response == "QR Decoding failed.":
             print(f"QR code(s) were found in your image but were invalid or unscannable.")
             sys.exit()
         else: #success :D
             if len(response) == 1:
-                print(f"1 link successfully decoded in {args.read}: {response[0]}")
+                print(f"1 link successfully decoded in '{args.read}': {response[0]}")
             else:
-                print(f"Multiple links successfully decoded in {args.read}:")
+                print(f"Multiple links successfully decoded in '{args.read}':")
                 for number, link in enumerate(response):
                     print(f"{number+1}. {link}")
     elif args.read is None and args.make: # make a qr code
@@ -84,17 +84,27 @@ def main():
                 sys.exit()
         if args.link is None and args.file is not None: # submit a file but it fails
             if not os.path.isfile(args.file):
-                print(f"The file {args.file} does not exist.")
+                print(f"The file '{args.file}' does not exist.")
                 sys.exit()
             else:
                 f = open(args.file, "r")
                 lines = list(f.read().strip().split("\n"))
                 if len(lines) > 1:
-                    print(f"The file {args.file} seems to be multiline. Please select a file with one line only, or use -l to directly use a link.")
+                    print(f"The file '{args.file}' seems to be multiline. Please select a file with one line only, or use -l to directly use a link.")
                     sys.exit()
                 else:
-                    enc = lines[0]
+                    enc = ""
+                    for line in lines:
+                        if line:
+                            enc = line
+                            break
+                    if not enc:
+                        print(f"The file '{args.file}' does not seem to have any encodable text. Please use a different file.")
+
         elif args.link is not None and args.file is None: #submit a link
+            if not args.link:
+                print(f"The text to encode must be non-empty.")
+                sys.exit()
             enc = args.link
         if args.embed is not None:
             if not os.path.isfile(args.embed):
