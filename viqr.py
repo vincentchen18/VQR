@@ -100,6 +100,7 @@ def main():
                             break
                     if not enc:
                         print(f"The file '{args.file}' does not seem to have any encodable text. Please use a different file.")
+                        sys.exit()
 
         elif args.link is not None and args.file is None: #submit a link
             if not args.link:
