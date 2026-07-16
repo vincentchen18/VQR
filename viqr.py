@@ -57,7 +57,7 @@ def make(text_to_encode, embed_image, size, output_file): #make the qr code
     while True:
         if c == 0:
             c = ""
-        if not os.path.isfile(f'qr{c}.png'):
+        if not os.path.exists(f'qr{c}.png'):
             break
         if c == "":
             c = 1
