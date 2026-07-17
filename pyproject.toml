@@ -4,8 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "viqr"
-version = "0.1.0"
-dependencies = ["qrcode", "pillow", "opencv-python"]
+version = "1.0.0"
+description = "A command-line tool to generate and read QR codes, with logo embedding."
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [{ name = "Vincent Chen" }]
+dependencies = ["qrcode>=7.0", "pillow>=9.0", "opencv-python>=4.3"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Environment :: Console",
+    "Topic :: Multimedia :: Graphics",
+]
+
+[project.urls]
+Homepage = "https://github.com/vincentchen18/viqr"
 
 [project.scripts]
 viqr = "viqr:main"
