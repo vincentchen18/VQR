@@ -52,7 +52,7 @@ def make(text_to_encode, embed_image, size, output_file): #make the qr code
         try:
             img.save(output_file)
         except Exception:
-            print(f"Failed to save the QR code to {output_file}. Check if the folder exists, whether you have permission, or if the file path is a directory.")
+            print(f"Failed to save the QR code to '{output_file}'. Check if the folder exists, whether you have permission, or if the file path is a directory.")
             sys.exit()
         print(f"Successfully generated and saved QR code to {output_file}")
         open_image(output_file)
@@ -67,13 +67,19 @@ def make(text_to_encode, embed_image, size, output_file): #make the qr code
             c = 1
         else:
             c += 1
-    img.save(f"qr{c}.png")
+    try:
+        img.save(f"qr{c}.png")
+    except Exception:
+        print(f"Failed to save the QR code to 'qr{c}.png'. Check if the folder exists, whether you have permission, or if the file path is a directory.")
+        sys.exit()
     print(f"Successfully generated and saved QR code to qr{c}.png")
     open_image(f"qr{c}.png")
 
 def read(path): # read a qr code
     # we have already verified that the file is a real image (according to magic bytes) and now we gotta view it and check for qr codes.
     image = cv2.imread(path)
+    if image is None:
+        return "Could not read image."
     detector = cv2.QRCodeDetector()
     data_response, decoded, points, useless_variable = detector.detectAndDecodeMulti(image)
     if not data_response:
@@ -100,8 +106,8 @@ def main():
         print("You are missing an action or a filepath. Would you like to make (-m) or read (-r) a QR Code?")
         sys.exit()
     if args.read is not None and not args.make: # reading mode
-        if args.link is not None or args.embed is not None or args.output is not None or args.size is not None:
-            print("Reading a QR Code does not accept the following fields: link, embed, output, size.")
+        if args.link is not None or args.embed is not None or args.output is not None or args.size is not None or args.file is not None:
+            print("Reading a QR Code does not accept the following fields: link, embed, output, size, file.")
             sys.exit()
         if os.path.isfile(args.read):
             try:
@@ -120,6 +126,9 @@ def main():
             sys.exit()
         elif response == "QR Decoding failed.":
             print(f"QR code(s) were found in your image but were invalid or unscannable.")
+            sys.exit()
+        elif response == "Could not read image.":
+            print(f"'{args.read}' couldn't be read as an image (unsupported format).")
             sys.exit()
         else: #success :D
             if len(response) == 1:
@@ -150,9 +159,13 @@ def main():
                 print(f"The file '{args.file}' does not exist.")
                 sys.exit()
             else:
-                f = open(args.file, "r")
-                lines = list(f.read().strip().split("\n"))
-                f.close()
+                try:
+                    f = open(args.file, "r")
+                    lines = list(f.read().strip().split("\n"))
+                    f.close()
+                except (UnicodeDecodeError, OSError):
+                    print(f"The file '{args.file}' could not be read as text.")
+                    sys.exit()
                 if len(lines) > 1:
                     print(f"The file '{args.file}' seems to be multiline. Please select a file with one line only, or use -l to directly use a link.")
                     sys.exit()
