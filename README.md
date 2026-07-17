@@ -1,6 +1,6 @@
 # ViQR v1.0.0
 
-ViQR (Vinnie's QR) is a QR image forensics tool that allows you to read and generate your own QR Codes, with logo embedding supported!
+ViQR (Vinnie's QR) is a QR image forensics tool that allows you to read and generate your own QR Codes, with logo embedding supported! Published to [PyPI](https://pypi.org/project/viqr/1.0.0/).
 
 ## Features
 
