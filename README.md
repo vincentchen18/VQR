@@ -75,4 +75,4 @@ The ViQR Tool can be installed onto any computer with the following command:
 
 AI was used minimally to assist in the learning of the argparse module and PyPI publication.
 
-![Example use of ViQR](img.png)
+![Example use of ViQR](https://github.com/vincentchen18/viqr/raw/main/img.png)
