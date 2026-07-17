@@ -49,7 +49,11 @@ def make(text_to_encode, embed_image, size, output_file): #make the qr code
     if embed_image is not None:
         img = paste_logo(img, embed_image)
     if output_file is not None:
-        img.save(output_file)
+        try:
+            img.save(output_file)
+        except Exception:
+            print(f"Failed to save the QR code to {output_file}. Check if the folder exists, whether you have permission, or if the file path is a directory.")
+            sys.exit()
         print(f"Successfully generated and saved QR code to {output_file}")
         open_image(output_file)
         return
